@@ -7,7 +7,7 @@ const getTask = async (req, res, next) => {
   try {
     task = await Task.findById(req.params.id);
     if (!task) {
-      return res.status(404).json({message: 'Cannot find subscriber'});
+      return res.status(404).json({message: 'Cannot find task'});
     }
   } catch (error) {
     return res.status(500).json({message: error.message});

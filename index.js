@@ -18,7 +18,7 @@ db.once('open', () => console.log('Connected to database!'));
 app.use(express.json());
 app.use(cors());
 
-const subscribersRouter = require('./routes/tasks');
-app.use('/tasks', subscribersRouter);
+const tasksRouter = require('./routes/tasks');
+app.use('/tasks', tasksRouter);
 
 app.listen(3000, () => console.log('Server started!'));
