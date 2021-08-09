@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Task = require('../models/task');
+const authenticateToken = require('../utils');
 
 const getTask = async (req, res, next) => {
   let task;
@@ -16,19 +17,22 @@ const getTask = async (req, res, next) => {
   next();
 };
 
-router.get('/', async (req, res) => {
+router.get('/', authenticateToken, async (req, res) => {
   try {
-    const tasks = await Task.find({}).sort({_id: -1});
+    const tasks = await Task.find({
+      user_id: req.user.id,
+    }).sort({_id: -1});
     res.json(tasks);
   } catch (error) {
     res.status(500).json({message: error.message});
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
   const task = new Task({
     title: req.body.title,
     isComplete: req.body.isComplete,
+    user_id: req.user.id
   });
   try {
     const newTask = await task.save();
@@ -38,7 +42,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.patch('/:id', getTask, async (req, res) => {
+router.patch('/:id', authenticateToken, getTask, async (req, res) => {
   if (req.body.title !== null) {
     res.task.title = req.body.title;
   }
@@ -53,7 +57,7 @@ router.patch('/:id', getTask, async (req, res) => {
   }
 });
 
-router.delete('/:id', getTask, async (req, res) => {
+router.delete('/:id', authenticateToken, getTask, async (req, res) => {
   try {
     await res.task.remove();
     res.json({message: 'Deleted task'});

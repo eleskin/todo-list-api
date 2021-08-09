@@ -21,4 +21,7 @@ app.use(cors());
 const tasksRouter = require('./routes/tasks');
 app.use('/tasks', tasksRouter);
 
+const usersRouter = require('./routes/users');
+app.use('/users', usersRouter);
+
 app.listen(3000, () => console.log('Server started!'));
